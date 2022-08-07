@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const authRouter = require("./routes/auth");
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => res.json({ message: "Hello Wrold" }));
+app.use("/api/auth", authRouter);
 
 // 404 Handler
 app.all("/*", (req, res, next) => {
