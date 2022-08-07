@@ -1,6 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-require("dotenv").config();
+require("dotenv").config({ path: "./.env.local" });
 
 const PORT = process.env.PORT || 8000;
 const CONNECTION_STRING = process.env.CONNECTION_STRING;
