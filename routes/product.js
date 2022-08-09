@@ -10,4 +10,4 @@ router
   .get(productController.getProduct)
   .patch(authenticate, productController.updateProduct);
 
-router.module.exports = router;
+module.exports = router;

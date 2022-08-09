@@ -9,6 +9,14 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  buyerRequestId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BuyerRequest",
+  },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+  },
   budget: {
     type: Number,
     min: [1, "Budget must be greater than 0"],
