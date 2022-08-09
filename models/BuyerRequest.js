@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
+const buyerRequestSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -13,29 +13,25 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [
+  attachments: [
     {
       type: String,
       required: true,
     },
   ],
-  hasSizes: {
-    type: Boolean,
-    default: false,
-  },
-  price: {
+  budget: {
     type: Number,
     min: [1, "Price must be greater than 0"],
   },
-  quantity: {
+  deliveryTime: {
     type: Number,
-    min: [0, "Quantity must be a valid number"],
+    min: [1, "Invalid timeline"],
   },
-  ownerId: {
+  buyerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
 });
 
-const Product = mongoose.model("Product", productSchema);
-module.exports = Product;
+const BuyerRequest = mongoose.model("BuyerRequest", buyerRequestSchema);
+module.exports = BuyerRequest;
