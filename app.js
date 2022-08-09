@@ -21,6 +21,7 @@ app.use("/api/user", userRouter);
 // Error handler
 app.use((err, req, res, next) => {
   if (err) {
+    console.error(err);
     return res.status(404).json({ status: "error", message: err.message });
   }
   next();
