@@ -1,5 +1,6 @@
 const express = require("express");
-const { authenticate } = require("../controllers/authController");
+const controller = require("../../../controllers/proposalController");
+const authenticate = require("../../../middlewares/authenticate");
 
 const router = express.Router();
 
@@ -8,6 +9,6 @@ router
   .get(authenticate, controller.getProposals)
   .post(authenticate, controller.createProposal);
 
-router.get("/:proposalId", controller.getProposals);
+router.get("/:proposalId", controller.getProposal);
 
 module.exports = router;
