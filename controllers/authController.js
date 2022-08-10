@@ -15,9 +15,11 @@ const signUp = async (req, res) => {
 
   try {
     const newUser = await User.create(user);
+    const tokenInfo = { id: newUser._id, isSeller: newUser.isSeller };
+    const token = await jwt.sign(tokenInfo, process.env.JWT_SECRET);
     return res.status(201).json({
       status: "success",
-      user: newUser,
+      token,
     });
   } catch (err) {
     res.status(400).json({

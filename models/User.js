@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  category: String,
 });
 
 userSchema.pre("save", function (next) {

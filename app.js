@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const productRouter = require("./routes/product");
+const chatRouter = require("./routes/chat");
+const orderRouter = require("./routes/order");
+const buyerRequetsRouter = require("./routes/buyer-requests/buyer-requests");
 const { authenticate } = require("./controllers/authController");
 const app = express();
 
@@ -17,6 +21,10 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/buyer-requests/", buyerRequetsRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
