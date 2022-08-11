@@ -2,17 +2,10 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const signUp = async (req, res) => {
-  const user = ({
-    firstName,
-    lastName,
-    city,
-    avatar,
-    address,
-    email,
-    phone,
-    password,
-  } = req.body);
+  const user = ({ firstName, lastName, city, address, email, phone, password } =
+    req.body);
 
+  user.avatar = req.file.path;
   try {
     const newUser = await User.create(user);
     const tokenInfo = { id: newUser._id, isSeller: newUser.isSeller };
