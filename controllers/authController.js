@@ -5,7 +5,7 @@ const signUp = async (req, res) => {
   const user = ({ firstName, lastName, city, address, email, phone, password } =
     req.body);
 
-  user.avatar = req.file.path;
+  user.avatar = req.file?.path;
   try {
     const newUser = await User.create(user);
 
@@ -41,6 +41,7 @@ const login = async (req, res) => {
     return res.status(201).json({
       status: "success",
       token,
+      user,
     });
   } catch (err) {
     console.log(err);
