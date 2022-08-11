@@ -42,6 +42,36 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   category: String,
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+  products: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
+  chats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chat",
+    },
+  ],
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
+  buyerRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BuyerRequest",
+    },
+  ],
 });
 
 userSchema.pre("save", function (next) {
