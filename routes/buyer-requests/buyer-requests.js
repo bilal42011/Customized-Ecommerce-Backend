@@ -7,7 +7,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(authenticate, controller.getBuyerRequests)
+  .get(authenticate, controller.getBuyerRequestsByCategory)
   .post(authenticate, controller.createBuyerRequest);
 router.get("/:requestId", controller.getBuyerRequest);
 

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(authenticate, userController.getSelfInfo)
+  .get(authenticate, userController.getInfo)
   .patch(authenticate, userController.patchUser);
 router.get("buyer-requets", authenticate, userController.getBuyerRequets);
 router.get("chats", authenticate, userController.getChats);
