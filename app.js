@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+app.use("/uploads", express.static("uploads"));
 // logger
 app.use((req, res, next) => {
   console.log(`${req.path}\t${req.query}`);

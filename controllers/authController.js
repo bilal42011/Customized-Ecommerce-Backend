@@ -3,17 +3,12 @@ const jwt = require("jsonwebtoken");
 
 class AuthController {
   async signUp(req, res) {
-    const user = ({
-      firstName,
-      lastName,
-      city,
-      address,
-      email,
-      phone,
-      password,
-    } = req.body);
+    const { firstName, lastName, city, address, email, phone, password } =
+      req.body;
 
+    const user = { firstName, lastName, city, address, email, phone, password };
     user.avatar = req.file?.path;
+
     try {
       const newUser = await User.create(user);
 

@@ -5,17 +5,18 @@ class BuyerRequestsController {
   async createBuyerRequest(req, res) {
     const buyerId = req.userInfo.id;
     try {
-      const buyerRequest = ({
+      const { title, description, category, budget, deliveryTime } = req.body;
+      const buyerRequest = {
         title,
         description,
         category,
         budget,
         deliveryTime,
-      } = req.body);
+      };
       buyerRequest.buyerId = buyerId;
+      buyerRequest.attachments = req.files?.map((e) => e.path);
 
       const newBuyerRequest = await BuyerRequest.create(buyerRequest);
-
       return res.status(201).json({
         status: "success",
         buyerRequest: newBuyerRequest,
