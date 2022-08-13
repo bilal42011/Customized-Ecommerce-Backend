@@ -8,6 +8,7 @@ router
   .route("/")
   .get(authenticate, userController.getInfo)
   .patch(authenticate, userController.patchUser);
+router.post("upgrade", authenticate, userController.upgradeAccount);
 router.get("buyer-requets", authenticate, userController.getBuyerRequets);
 router.get("chats", authenticate, userController.getChats);
 router.get("orders", authenticate, userController.getOrders);

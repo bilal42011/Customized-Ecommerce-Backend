@@ -35,6 +35,7 @@ class BuyerRequestsController {
       });
     }
   }
+
   async getBuyerRequest(req, res) {
     const { requestId } = req.params;
 
@@ -53,6 +54,7 @@ class BuyerRequestsController {
       });
     }
   }
+
   async getBuyerRequestsByCategory(req, res) {
     try {
       const userId = req.userInfo.id;

@@ -1,3 +1,4 @@
+const Product = require("../models/Product");
 const { find, findById } = require("../models/User");
 const User = require("../models/User");
 
@@ -16,6 +17,29 @@ class UserController {
       status: "success",
       user,
     });
+  }
+
+  async upgradeAccount(req, res) {
+    try {
+      const { category, product } = req.body;
+
+      const user = await User.findById(req.userInfo.id);
+      user.update({ category: category });
+
+      if (product) {
+        const newProduct = await Product.create(product);
+        user.update({ $push: { products: newProduct._id } });
+      }
+      await user.save();
+
+      return res.status(201);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
   async getBuyerRequets(req, res) {
@@ -52,7 +76,6 @@ class UserController {
   }
 
   // Public routes
-
   async getUserInfo(req, res) {
     const { userId } = req.params;
     const user = await User.findById(userId).select(
