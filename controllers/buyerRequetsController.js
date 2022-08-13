@@ -17,6 +17,11 @@ class BuyerRequestsController {
       buyerRequest.attachments = req.files?.map((e) => e.path);
 
       const newBuyerRequest = await BuyerRequest.create(buyerRequest);
+
+      await User.findByIdAndUpdate(buyerId, {
+        $push: { buyerRequests: newBuyerRequest._id },
+      });
+
       return res.status(201).json({
         status: "success",
         buyerRequest: newBuyerRequest,
