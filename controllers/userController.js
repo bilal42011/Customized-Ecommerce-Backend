@@ -23,7 +23,7 @@ class UserController {
       const { category, product } = req.body;
 
       const user = await User.findById(req.userInfo.id);
-      user.update({ category: category });
+      user.update({ category: category, isSeller: true });
 
       if (product) {
         const newProduct = await Product.create(product);
@@ -60,15 +60,17 @@ class UserController {
     }
   }
 
-  async getOrders(req, res) {
-    const orders = await User.findById(req.userInfo.id)
-      .select("orders")
-      .populate("orders");
+  async getOrdersAsSeller(req, res) {
+    const orders = [];
 
     return res.status(200).json({
       status: "success",
       orders,
     });
+  }
+
+  async getOrdersAsBuyer(req, res) {
+    return res.status(200).json([]);
   }
 
   async getChats(req, res) {
