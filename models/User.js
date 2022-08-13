@@ -1,77 +1,87 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: [true, "Email must be unique"],
-  },
-  phone: {
-    type: Number,
-    required: true,
-    unique: [true, "Email must be unique"],
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  username: {
-    type: String,
-  },
-  avatar: String,
-  isSeller: {
-    type: Boolean,
-    default: false,
-  },
-  category: String,
-  reviews: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Review",
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: [true, "Email must be unique"],
     },
-  ],
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+    phone: {
+      type: Number,
+      required: true,
+      unique: [true, "Email must be unique"],
     },
-  ],
-  chats: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Chat",
+    firstName: {
+      type: String,
+      required: true,
     },
-  ],
-  orders: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
+    lastName: {
+      type: String,
+      required: true,
     },
-  ],
-  buyerRequests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "BuyerRequest",
+    city: {
+      type: String,
+      required: true,
     },
-  ],
-});
+    address: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+    },
+    avatar: String,
+    isSeller: {
+      type: Boolean,
+      default: false,
+    },
+    category: String,
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    chats: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Chat",
+      },
+    ],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    buyerRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BuyerRequest",
+      },
+    ],
+  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
 
 userSchema.pre("save", function (next) {
   if (this.isModified("password")) {
@@ -91,6 +101,7 @@ userSchema.methods.comparePassword = async function (password) {
     return result;
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 

@@ -19,6 +19,11 @@ const buyerRequestSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  status: {
+    type: String,
+    enum: ["Open", "Order in progress", "Closed"],
+    default: "Open",
+  },
   budget: {
     type: Number,
     min: [1, "Price must be greater than 0"],

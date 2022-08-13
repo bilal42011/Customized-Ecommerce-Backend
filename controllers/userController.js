@@ -1,5 +1,4 @@
 const Product = require("../models/Product");
-const { find, findById } = require("../models/User");
 const User = require("../models/User");
 
 class UserController {
@@ -43,18 +42,26 @@ class UserController {
   }
 
   async getBuyerRequets(req, res) {
-    const buyerRequests = await findById(req.userInfo.id)
-      .select("buyerRequets")
-      .populate("buyerRequets");
+    try {
+      const buyerRequests = await User.findById(req.userInfo.id)
+        .select("buyerRequests")
+        .populate("buyerRequests");
 
-    return res.status(200).json({
-      status: "success",
-      buyerRequests,
-    });
+      return res.status(200).json({
+        status: "success",
+        buyerRequests: buyerRequests.buyerRequests,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
   async getOrders(req, res) {
-    const orders = await findById(req.userInfo.id)
+    const orders = await User.findById(req.userInfo.id)
       .select("orders")
       .populate("orders");
 
@@ -65,7 +72,7 @@ class UserController {
   }
 
   async getChats(req, res) {
-    const buyerRequests = await findById(req.userInfo.id)
+    const buyerRequests = await User.findById(req.userInfo.id)
       .select("chats")
       .populate("chats");
 
@@ -78,13 +85,21 @@ class UserController {
   // Public routes
   async getUserInfo(req, res) {
     const { userId } = req.params;
-    const user = await User.findById(userId).select(
-      "-password -orders -email -phone"
-    );
-    return res.status(200).json({
-      status: "success",
-      user,
-    });
+    try {
+      const user = await User.findById(userId).select(
+        "-password -orders -email -phone"
+      );
+      return res.status(200).json({
+        status: "success",
+        user,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
   async getProducts(req, res) {

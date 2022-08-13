@@ -17,6 +17,7 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
   },
+  orderStatus: String,
   budget: {
     type: Number,
     min: [1, "Budget must be greater than 0"],

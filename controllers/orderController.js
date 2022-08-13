@@ -4,11 +4,11 @@ const Proposal = require("../models/Proposal");
 class OrderController {
   async createOrder(req, res) {
     const buyerId = req.userInfo.id;
-    const { proposalId } = req.body;
+    const { productId, proposalId } = req.body;
 
     let seller = {};
 
-    if (isReadyMade) {
+    if (productId) {
       seller = await Product.findById(productId)
         .select("ownerId")
         .populate("ownerId");
