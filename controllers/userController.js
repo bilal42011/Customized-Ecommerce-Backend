@@ -19,19 +19,22 @@ class UserController {
   }
 
   async upgradeAccount(req, res) {
+    const buyerId = req.userInfo.id;
     try {
-      const { category, product } = req.body;
+      const { category } = req.body;
 
-      const user = await User.findById(req.userInfo.id);
-      user.update({ category: category, isSeller: true });
+      const user = await User.findByIdAndUpdate(buyerId, {
+        category: category,
+        isSeller: true,
+      });
 
-      if (product) {
-        const newProduct = await Product.create(product);
-        user.update({ $push: { products: newProduct._id } });
-      }
       await user.save();
+      console.log(user);
 
-      return res.status(201);
+      return res.status(201).json({
+        status: "success",
+        user,
+      });
     } catch (err) {
       console.log(err);
       return res.status(400).json({
