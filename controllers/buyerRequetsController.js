@@ -58,13 +58,23 @@ class BuyerRequestsController {
   async getBuyerRequestsByCategory(req, res) {
     try {
       const userId = req.userInfo.id;
-      const category = await User.findById(userId).select("category");
+      const { page } = req.query,
+        limit = 10;
+      const user = await User.findById(userId);
 
-      const buyerRequets = await BuyerRequest.find({ category: category });
+      // find the buyer requests where category = user's selling category
+      // and that request is not posted by this user
+      const buyerRequests = await BuyerRequest.find({
+        $and: [{ category: user.category }, { buyerId: { $ne: user._id } }],
+      })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate("buyerId");
 
       return res.status(200).json({
         status: "success",
-        buyerRequets,
+        buyerRequests,
+        totalPages: Math.ceil(buyerRequests.length / limit),
       });
     } catch (err) {
       console.log(err);
