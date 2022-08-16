@@ -40,7 +40,9 @@ class BuyerRequestsController {
     const { requestId } = req.params;
 
     try {
-      const request = await BuyerRequest.findById(requestId);
+      const request = await BuyerRequest.findById(requestId).populate(
+        "buyerId"
+      );
       return res.status(200).json({
         status: "success",
         request,
