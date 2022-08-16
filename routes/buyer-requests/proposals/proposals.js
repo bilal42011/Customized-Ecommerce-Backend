@@ -2,7 +2,7 @@ const express = require("express");
 const controller = require("../../../controllers/proposalController");
 const authenticate = require("../../../middlewares/authenticate");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
