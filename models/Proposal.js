@@ -7,8 +7,14 @@ const proposalSchema = new mongoose.Schema({
   },
   attachments: [
     {
-      type: String,
-      required: true,
+      filename: {
+        type: String,
+        required: true,
+      },
+      path: {
+        type: String,
+        required: true,
+      },
     },
   ],
   budget: {

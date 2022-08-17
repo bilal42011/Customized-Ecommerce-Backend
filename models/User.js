@@ -72,6 +72,12 @@ const userSchema = new mongoose.Schema(
         ref: "BuyerRequest",
       },
     ],
+    sellerProposals: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Proposal",
+      },
+    ],
   },
   {
     toJSON: {

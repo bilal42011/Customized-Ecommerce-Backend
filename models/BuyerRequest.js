@@ -15,8 +15,14 @@ const buyerRequestSchema = new mongoose.Schema({
   },
   attachments: [
     {
-      type: String,
-      required: true,
+      filename: {
+        type: String,
+        required: true,
+      },
+      path: {
+        type: String,
+        required: true,
+      },
     },
   ],
   status: {
@@ -36,6 +42,12 @@ const buyerRequestSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  proposals: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Proposal",
+    },
+  ],
 });
 
 const BuyerRequest = mongoose.model("BuyerRequest", buyerRequestSchema);
