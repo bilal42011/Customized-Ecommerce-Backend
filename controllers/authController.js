@@ -40,8 +40,8 @@ class AuthController {
         id: user._id,
         isSeller: user.isSeller,
       };
-      const userDoc = { ...user._doc };
-      delete userDoc["password"];
+      const userDoc = user.toObject();
+      delete userDoc.password;
       const token = await jwt.sign(tokenInfo, process.env.JWT_SECRET);
       return res.status(201).json({
         status: "success",

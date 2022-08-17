@@ -14,7 +14,9 @@ class BuyerRequestsController {
         deliveryTime,
       };
       buyerRequest.buyerId = buyerId;
-      buyerRequest.attachments = req.files?.map((e) => e.path);
+      buyerRequest.attachments = req.files?.map((e) => {
+        return { filename: e.filename, path: e.path };
+      });
 
       const newBuyerRequest = await BuyerRequest.create(buyerRequest);
 

@@ -6,9 +6,15 @@ class ProposalController {
   async getProposals(req, res) {
     try {
       const { requestId } = req.params;
-      const request = await BuyerRequest.findById(requestId).populate(
-        "proposals"
-      );
+      const request = await BuyerRequest.findById(requestId).populate({
+        path: "proposals",
+        populate: [
+          {
+            path: "sellerId",
+            model: "User",
+          },
+        ],
+      });
       res.status(200).json({
         status: "success",
         request,
