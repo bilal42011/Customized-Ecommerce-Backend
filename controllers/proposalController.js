@@ -62,7 +62,7 @@ class ProposalController {
   async getProposal(req, res) {
     try {
       const { proposalId } = req.params;
-      const proposal = await Proposal.findById(proposalId);
+      const proposal = await Proposal.findById(proposalId).populate("sellerId");
       res.status(200).json({
         status: "success",
         proposal,

@@ -1,10 +1,7 @@
 const express = require("express");
 const controller = require("../../../controllers/proposalController");
 const authenticate = require("../../../middlewares/authenticate");
-const {
-  imageUpload,
-  attachmentUpload,
-} = require("../../../middlewares/upload");
+const { attachmentUpload } = require("../../../middlewares/upload");
 
 const router = express.Router({ mergeParams: true });
 
