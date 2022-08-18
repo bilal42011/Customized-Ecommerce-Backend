@@ -1,5 +1,5 @@
 const express = require("express");
-const proposalsRouter = require("./proposals/proposals");
+const proposalsRouter = require("./proposals");
 const controller = require("../../controllers/buyerRequetsController");
 const authenticate = require("../../middlewares/authenticate");
 const { attachmentUpload } = require("../../middlewares/upload");
