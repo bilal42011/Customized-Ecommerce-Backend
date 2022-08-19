@@ -1,3 +1,4 @@
+const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Proposal = require("../models/Proposal");
 
@@ -18,12 +19,36 @@ class OrderController {
         .populate("sellerId");
     }
   }
+
+  async getOrder(req, res) {
+    try {
+      const { orderId } = req.params;
+
+      const order = await Order.findById(orderId);
+
+      res.status(200).json({ status: "success", order });
+    } catch (err) {
+      res.status(404).json({
+        status: "success",
+        message: err.message,
+      });
+    }
+  }
+
+  async getOrdersAsSeller(req, res) {
+    const orders = [];
+
+    return res.status(200).json({
+      status: "success",
+      orders,
+    });
+  }
+
+  async getOrdersAsBuyer(req, res) {
+    return res.status(200).json([]);
+  }
+
+  async cancelOrder(req, res) {}
 }
-
-const createOrder = (req, res) => {};
-
-const getOrder = (req, res) => {};
-
-const cancelOrder = (req, res) => {};
 
 module.exports = { createOrder, getOrder, cancelOrder };

@@ -1,7 +1,9 @@
-const createChat = (req, res) => {};
+class ChatController {
+  async createChat(req, res) {}
 
-const getMessages = (req, res) => {};
+  async getMessages(req, res) {}
 
-const addMessage = (req, res) => {};
+  async addMessage(req, res) {}
+}
 
-module.exports = { createChat, getMessages, addMessage };
+module.exports = new ChatController();

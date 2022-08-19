@@ -15,5 +15,7 @@ router
   );
 
 router.get("/:proposalId", controller.getProposal);
+router.get("/:proposalId/accept", controller.acceptProposal);
+router.get("/:proposalId/decline", controller.declineProposal);
 
 module.exports = router;

@@ -63,19 +63,6 @@ class UserController {
     }
   }
 
-  async getOrdersAsSeller(req, res) {
-    const orders = [];
-
-    return res.status(200).json({
-      status: "success",
-      orders,
-    });
-  }
-
-  async getOrdersAsBuyer(req, res) {
-    return res.status(200).json([]);
-  }
-
   async getChats(req, res) {
     const buyerRequests = await User.findById(req.userInfo.id)
       .select("chats")

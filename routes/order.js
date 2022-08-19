@@ -5,6 +5,7 @@ const authenticate = require("../middlewares/authenticate");
 const router = express.Router();
 
 router.post("/", authenticate, orderController.createOrder);
+
 router
   .route("/:orderId")
   .get(authenticate, orderController.getOrder)

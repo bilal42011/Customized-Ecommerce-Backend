@@ -27,8 +27,8 @@ const buyerRequestSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ["Open", "Order in progress", "Closed"],
-    default: "Open",
+    enum: ["OPEN", "ACTIVE_ORDER", "CLOSED"],
+    default: "OPEN",
   },
   budget: {
     type: Number,

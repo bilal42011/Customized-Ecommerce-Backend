@@ -17,7 +17,11 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
   },
-  orderStatus: String,
+  orderStatus: {
+    type: String,
+    enum: ["In Progress", "Delivered", "Cancelled", "Completed"],
+    default: "In Progress",
+  },
   budget: {
     type: Number,
     min: [1, "Budget must be greater than 0"],

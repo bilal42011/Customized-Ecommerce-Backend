@@ -19,8 +19,8 @@ const proposalSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ["Pending", "Declined", "Accepted"],
-    default: "Pending",
+    enum: ["PENDING", "DECLINED", "ACCEPTED"],
+    default: "PENDING",
   },
   budget: {
     type: Number,
