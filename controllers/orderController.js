@@ -143,6 +143,7 @@ class OrderController {
       const { orderId } = req.params;
       const order = await Order.findByIdAndUpdate(orderId, {
         orderStatus: "PENDING_CANCEL",
+        cancelInitiator: req.userInfo.id,
       });
       return res.status(200).json({
         status: "success",

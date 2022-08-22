@@ -13,7 +13,7 @@ router.route("/:orderId").get(authenticate, orderController.getOrder);
 router.patch(
   "/:orderId/deliver",
   authenticate,
-  attachmentUpload.array("3"),
+  attachmentUpload.array(3),
   orderController.deliverOrder
 );
 
@@ -22,7 +22,6 @@ router.patch("/:orderId/cancel", authenticate, orderController.cancelOrder);
 router.patch(
   "/:orderId/cancel-confirm",
   authenticate,
-  attachmentUpload.array("3"),
   orderController.cancelConfirm
 );
 

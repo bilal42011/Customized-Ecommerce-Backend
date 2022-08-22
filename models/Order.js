@@ -23,8 +23,18 @@ const orderSchema = new mongoose.Schema({
   },
   orderStatus: {
     type: String,
-    enum: ["IN_PROGRESS", "DELIVERED", "CANCELLED", "COMPLETED"],
+    enum: [
+      "IN_PROGRESS",
+      "DELIVERED",
+      "PENDING_CANCEL",
+      "CANCELLED",
+      "COMPLETED",
+    ],
     default: "IN_PROGRESS",
+  },
+  cancelInitiator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   budget: {
     type: Number,
