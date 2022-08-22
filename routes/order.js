@@ -10,10 +10,13 @@ router.get("/as-seller", authenticate, orderController.getOrdersAsSeller);
 router.get("/as-buyer", authenticate, orderController.getOrdersAsBuyer);
 router.route("/:orderId").get(authenticate, orderController.getOrder);
 
-router.patch(
+router.get("/:orderId/approve", authenticate, orderController.approveOrder);
+router.get("/:orderId/decline", authenticate, orderController.declineOrder);
+
+router.post(
   "/:orderId/deliver",
   authenticate,
-  attachmentUpload.array(3),
+  attachmentUpload.array("files", 3),
   orderController.deliverOrder
 );
 

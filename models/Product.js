@@ -15,8 +15,14 @@ const productSchema = new mongoose.Schema({
   },
   images: [
     {
-      type: String,
-      required: true,
+      filename: {
+        type: String,
+        required: true,
+      },
+      path: {
+        type: String,
+        required: true,
+      },
     },
   ],
   hasSizes: {
@@ -25,11 +31,13 @@ const productSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
+    required: true,
     min: [1, "Price must be greater than 0"],
   },
   quantity: {
     type: Number,
-    min: [0, "Quantity must be a valid number"],
+    required: true,
+    min: [1, "Quantity must be a valid number"],
   },
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,

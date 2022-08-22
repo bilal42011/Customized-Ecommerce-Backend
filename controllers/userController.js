@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 class UserController {
   async getInfo(req, res) {
-    const user = await User.findById(req.userInfo.id);
+    const user = await User.findById(req.userInfo.id).populate("products");
     return res.status(200).json({
       status: "success",
       user,
@@ -11,11 +11,27 @@ class UserController {
   }
 
   async patchUser(req, res) {
-    const user = await User.findByIdAndUpdate(req.userInfo.id, req.body);
-    return res.status(204).json({
-      status: "success",
-      user,
-    });
+    const { firstName, lastName, description, city, address, email, phone } =
+      req.body;
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.userInfo.id,
+        { firstName, lastName, description, city, address, email, phone },
+        {
+          new: true,
+        }
+      );
+      return res.status(200).json({
+        status: "success",
+        user,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: "error",
+        message: error.message,
+      });
+    }
   }
 
   async upgradeAccount(req, res) {

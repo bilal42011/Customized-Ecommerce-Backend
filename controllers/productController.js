@@ -1,19 +1,27 @@
 const Product = require("../models/Product");
+const User = require("../models/User");
 
 class ProductController {
   async createProduct(req, res) {
     try {
-      const product = ({
+      const { title, description, category, hasSizes, price, quantity } =
+        req.body;
+      const product = {
         title,
         description,
         category,
         hasSizes,
         price,
         quantity,
-      } = req.body);
+      };
       product.ownerId = req.userInfo.id;
-
+      product.images = req.files.map((elem) => {
+        return { filename: elem.filename, path: elem.path };
+      });
       const newProduct = await Product.create(product);
+      const user = await User.findByIdAndUpdate(req.userInfo.id, {
+        $push: { products: newProduct._id },
+      });
       return res.status(201).json({
         status: "success",
         product: newProduct,

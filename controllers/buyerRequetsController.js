@@ -69,7 +69,11 @@ class BuyerRequestsController {
       // find the buyer requests where category = user's selling category
       // and that request is not posted by this user
       const buyerRequests = await BuyerRequest.find({
-        $and: [{ category: user.category }, { buyerId: { $ne: user._id } }],
+        $and: [
+          { category: user.category },
+          { buyerId: { $ne: user._id } },
+          { status: "OPEN" },
+        ],
       })
         .skip((page - 1) * limit)
         .limit(limit)

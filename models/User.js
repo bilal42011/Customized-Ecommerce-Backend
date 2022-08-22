@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: String,
     city: {
       type: String,
       required: true,
