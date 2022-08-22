@@ -17,10 +17,14 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
   },
+  proposalId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Proposal",
+  },
   orderStatus: {
     type: String,
-    enum: ["In Progress", "Delivered", "Cancelled", "Completed"],
-    default: "In Progress",
+    enum: ["IN_PROGRESS", "DELIVERED", "CANCELLED", "COMPLETED"],
+    default: "IN_PROGRESS",
   },
   budget: {
     type: Number,
@@ -29,6 +33,27 @@ const orderSchema = new mongoose.Schema({
   deliveryTime: {
     type: Number,
     min: [1, "Invalid timeline"],
+  },
+  message: String,
+  attachments: [
+    {
+      filename: {
+        type: String,
+        required: true,
+      },
+      path: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  dueIn: {
+    type: Date,
+    default: function () {
+      const date = new Date();
+      date.setHours(24 * this.deliveryTime);
+      return date;
+    },
   },
 });
 
