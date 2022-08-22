@@ -2,6 +2,16 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Proposal = require("../models/Proposal");
 
+const PUBLIC_USER_FIELDS = [
+  "fullName",
+  "email",
+  "_id",
+  "city",
+  "firstName",
+  "lastName",
+  "address",
+];
+
 class OrderController {
   async createOrder(req, res) {
     const buyerId = req.userInfo.id;
@@ -10,21 +20,30 @@ class OrderController {
     let seller = {};
 
     if (productId) {
-      seller = await Product.findById(productId)
-        .select("ownerId")
-        .populate("ownerId");
+      seller = await Product.findById(productId).select("ownerId");
     } else {
-      seller = await Proposal.findById(proposalId)
-        .select("sellerId")
-        .populate("sellerId");
+      seller = await Proposal.findById(proposalId).select("sellerId");
     }
+    return res.sendStatus(501); // Not implemented
   }
 
   async getOrder(req, res) {
     try {
       const { orderId } = req.params;
 
-      const order = await Order.findById(orderId);
+      const order = await Order.findById(orderId).populate([
+        {
+          path: "sellerId",
+          select: PUBLIC_USER_FIELDS,
+        },
+        {
+          path: "buyerId",
+          select: PUBLIC_USER_FIELDS,
+        },
+        "buyerRequestId",
+        "proposalId",
+        "productId",
+      ]);
 
       res.status(200).json({ status: "success", order });
     } catch (err) {
@@ -32,23 +51,111 @@ class OrderController {
         status: "success",
         message: err.message,
       });
+      console.log(err);
     }
   }
 
   async getOrdersAsSeller(req, res) {
-    const orders = [];
+    try {
+      const userId = req.userInfo.id;
+      const orders = await Order.find({ sellerId: userId }).populate("buyerId");
 
-    return res.status(200).json({
-      status: "success",
-      orders,
-    });
+      return res.status(200).json({
+        status: "success",
+        orders,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
   async getOrdersAsBuyer(req, res) {
-    return res.status(200).json([]);
+    try {
+      const userId = req.userInfo.id;
+      const orders = await Order.find({ buyerId: userId }).populate(
+        "sellerId",
+        PUBLIC_USER_FIELDS
+      );
+
+      return res.status(200).json({
+        status: "success",
+        orders,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
-  async cancelOrder(req, res) {}
+  async deliverOrder(req, res) {
+    try {
+      const { orderId } = req.params;
+      const { message } = req.body;
+      const files = req.files.map((e) => {
+        return { path: e.path, filename: e.filename };
+      });
+      const order = await Order.findByIdAndUpdate(orderId, {
+        message: message,
+        orderStatus: "DELIVERED",
+        attachments: files,
+      });
+      return res.status(200).json({
+        status: "success",
+        order,
+      });
+    } catch (error) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
+
+  async cancelConfirm(req, res) {
+    try {
+      const { orderId } = req.params;
+      const order = await Order.findByIdAndUpdate(orderId, {
+        orderStatus: "CANCELLED",
+      });
+      return res.status(200).json({
+        status: "success",
+        order,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
+
+  async cancelOrder(req, res) {
+    try {
+      const { orderId } = req.params;
+      const order = await Order.findByIdAndUpdate(orderId, {
+        orderStatus: "PENDING_CANCEL",
+      });
+      return res.status(200).json({
+        status: "success",
+        order,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
 }
 
-module.exports = { createOrder, getOrder, cancelOrder };
+module.exports = new OrderController();
