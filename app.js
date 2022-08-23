@@ -6,12 +6,13 @@ const productRouter = require("./routes/product");
 const chatRouter = require("./routes/chat");
 const orderRouter = require("./routes/order");
 const buyerRequetsRouter = require("./routes/buyer-requests");
+const cartRouter = require("./routes/cart");
 const { authenticate } = require("./controllers/authController");
 const app = express();
 
 app.use(cors());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // logger
@@ -27,6 +28,7 @@ app.use("/api/product", productRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/buyer-requests", buyerRequetsRouter);
+app.use("/api/cart", cartRouter);
 
 // Error handler
 app.use((err, req, res, next) => {

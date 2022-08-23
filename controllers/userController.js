@@ -94,9 +94,9 @@ class UserController {
   async getUserInfo(req, res) {
     const { userId } = req.params;
     try {
-      const user = await User.findById(userId).select(
-        "-password -orders -email -phone"
-      );
+      const user = await User.findById(userId)
+        .select("-password -orders -email -phone")
+        .populate("products");
       return res.status(200).json({
         status: "success",
         user,

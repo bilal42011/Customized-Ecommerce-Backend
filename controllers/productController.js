@@ -55,9 +55,18 @@ class ProductController {
 
   async updateProduct(req, res) {
     const { productId } = req.params;
+    const { title, description, category, hasSizes, price, quantity } =
+      req.body;
 
     try {
-      const product = await Product.findByIdAndUpdate(productId, req.body);
+      const product = await Product.findByIdAndUpdate(productId, {
+        title,
+        description,
+        category,
+        hasSizes,
+        price,
+        quantity,
+      });
 
       return res.status(204).json({
         status: "success",
