@@ -36,6 +36,20 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  shippingInfo: {
+    firstName: String,
+    lastName: String,
+    city: String,
+    address: String,
+    phone: String,
+  },
+  paymentInfo: {
+    cc_name: String,
+    cc_number: String,
+    cvc: Number,
+    expiry: Date,
+  },
+  productQuantity: Number,
   budget: {
     type: Number,
     min: [1, "Budget must be greater than 0"],

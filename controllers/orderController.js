@@ -9,6 +9,7 @@ const PUBLIC_USER_FIELDS = [
   "_id",
   "city",
   "firstName",
+  "description",
   "lastName",
   "address",
   "avatar",
@@ -30,17 +31,56 @@ const ORDER_FIELDS_TO_POPULATE = [
 
 class OrderController {
   async createOrder(req, res) {
-    const buyerId = req.userInfo.id;
-    const { productId, proposalId } = req.body;
+    try {
+      const buyerId = req.userInfo.id;
+      const { products, shippingInfo, paymentInfo } = req.body;
 
-    let seller = {};
+      const ids = products.map((elem) => elem._id);
 
-    if (productId) {
-      seller = await Product.findById(productId).select("ownerId");
-    } else {
-      seller = await Proposal.findById(proposalId).select("sellerId");
+      const cartProducts = await Product.find({ _id: { $in: ids } });
+      let total = 0;
+
+      const orders = await Promise.all(
+        cartProducts.map(async (product, i) => {
+          const item = products.find((e) => e._id == product._id);
+          if (item.quantity > product.quantity) {
+            throw new Error(
+              `Not enough stock available for '${product.title}'`
+            );
+          } else {
+            total += product.price * item.quantity;
+          }
+          const order = {
+            sellerId: product.ownerId,
+            buyerId: req.userInfo.id,
+            productId: product._id,
+            productQuantity: item.quantity,
+            deliveryTime: 3,
+            budget: product.price,
+            shippingInfo,
+            paymentInfo,
+          };
+
+          const newOrder = await Order.create(order);
+          product.quantity -= item.quantity;
+          await product.save();
+          return newOrder;
+        })
+      );
+
+      res.status(200).json({
+        status: "success",
+        orders,
+      });
+
+      // Not implemented
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
     }
-    return res.sendStatus(501); // Not implemented
   }
 
   async getOrder(req, res) {

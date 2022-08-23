@@ -2,6 +2,32 @@ const Product = require("../models/Product");
 const User = require("../models/User");
 
 class ProductController {
+  async getProducts(req, res) {
+    try {
+      const { page, category } = req.query;
+      const limit = 10;
+      const products = await Product.find({ category })
+        .skip((page - 1) * limit)
+        .limit(10)
+        .populate("ownerId");
+      const result = {
+        count: products.length,
+        products,
+        totalPages: Math.ceil(products.length / limit),
+      };
+      return res.status(200).json({
+        status: "success",
+        result,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(401).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
+
   async createProduct(req, res) {
     try {
       const { title, description, category, hasSizes, price, quantity } =

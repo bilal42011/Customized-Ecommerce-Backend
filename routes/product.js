@@ -5,6 +5,8 @@ const { imageUpload } = require("../middlewares/upload");
 
 const router = express.Router();
 
+router.get("/", productController.getProducts);
+
 router.post(
   "/",
   authenticate,
