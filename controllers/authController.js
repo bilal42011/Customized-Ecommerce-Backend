@@ -1,6 +1,9 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../utils/mailer");
+
+const generateOTP = () => `${Math.floor(1000 + Math.random() * 9000)}`;
+
 class AuthController {
   async signUp(req, res) {
     const { firstName, lastName, city, address, email, phone, password } =
@@ -14,7 +17,7 @@ class AuthController {
       const tokenInfo = { id: newUser._id, isSeller: newUser.isSeller };
       const token = await jwt.sign(tokenInfo, process.env.JWT_SECRET);
 
-      const OTP = `${Math.floor(1000 + Math.random() * 9000)}`;
+      const OTP = generateOTP();
 
       newUser.authCode = OTP;
       await newUser.save();
@@ -71,11 +74,18 @@ class AuthController {
       if (!(await user.comparePassword(password))) {
         throw new Error("Incorrect password!");
       }
+
       const tokenInfo = {
         id: user._id,
         isSeller: user.isSeller,
       };
       const userDoc = user.toObject();
+
+      if (!user.isVerified) {
+        user.authCode = generateOTP();
+        await user.save();
+      }
+
       delete userDoc.password;
       const token = await jwt.sign(tokenInfo, process.env.JWT_SECRET);
       return res.status(201).json({
