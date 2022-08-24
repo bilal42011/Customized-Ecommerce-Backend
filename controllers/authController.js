@@ -56,6 +56,7 @@ class AuthController {
       }
       return res.status(200).json({
         status: "success",
+        user,
       });
     } catch (err) {
       console.log(err);

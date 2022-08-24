@@ -70,7 +70,7 @@ class BuyerRequestsController {
       // and that request is not posted by this user
       const buyerRequests = await BuyerRequest.find({
         $and: [
-          { category: user.category },
+          { category: { $regex: user.category, options: "i" } },
           { buyerId: { $ne: user._id } },
           { status: "OPEN" },
         ],
