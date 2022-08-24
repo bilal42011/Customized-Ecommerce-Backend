@@ -106,6 +106,30 @@ class ProductController {
       });
     }
   }
+
+  async deleteProduct(req, res) {
+    const { productId } = req.params;
+    try {
+      const product = await Product.findById(productId);
+
+      const user = await User.findByIdAndUpdate(product.ownerId, {
+        $pull: { products: product._id },
+      });
+
+      await product.delete();
+
+      return res.status(200).json({
+        status: "success",
+        product,
+      });
+    } catch (err) {
+      return res.status(404).json({
+        status: "Error",
+        info: "Product not found",
+        message: err.message,
+      });
+    }
+  }
 }
 
 module.exports = new ProductController();

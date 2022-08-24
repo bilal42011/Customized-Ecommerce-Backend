@@ -52,10 +52,14 @@ class UserController {
     try {
       const { category } = req.body;
 
-      const user = await User.findByIdAndUpdate(buyerId, {
-        category: category,
-        isSeller: true,
-      });
+      const user = await User.findByIdAndUpdate(
+        buyerId,
+        {
+          category: category,
+          isSeller: true,
+        },
+        { new: true }
+      );
 
       await user.save();
       console.log(user);
@@ -158,7 +162,7 @@ class UserController {
     const { userId } = req.params;
     try {
       const user = await User.findById(userId)
-        .select("-password -orders -email -phone")
+        .select("-password -orders")
         .populate("products");
       return res.status(200).json({
         status: "success",

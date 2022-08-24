@@ -16,6 +16,7 @@ router.post(
 router
   .route("/:productId")
   .get(productController.getProduct)
-  .patch(authenticate, productController.updateProduct);
+  .patch(authenticate, productController.updateProduct)
+  .delete(authenticate, productController.deleteProduct);
 
 module.exports = router;
