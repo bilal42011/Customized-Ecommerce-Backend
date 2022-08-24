@@ -83,9 +83,13 @@ class UserController {
         .select("buyerRequests")
         .populate("buyerRequests");
 
+      const temp = buyerRequests.buyerRequests.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      console.log(temp);
       return res.status(200).json({
         status: "success",
-        buyerRequests: buyerRequests.buyerRequests,
+        buyerRequests: temp,
       });
     } catch (err) {
       console.log(err);
