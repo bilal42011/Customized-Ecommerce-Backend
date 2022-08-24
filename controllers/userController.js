@@ -1,5 +1,8 @@
+const Message = require("../models/Message");
 const Product = require("../models/Product");
 const User = require("../models/User");
+
+const USER_FIELDS = ["avatar", "_id", "city", "firstName", "lastName"];
 
 class UserController {
   async getInfo(req, res) {
@@ -80,14 +83,64 @@ class UserController {
   }
 
   async getChats(req, res) {
-    const buyerRequests = await User.findById(req.userInfo.id)
-      .select("chats")
-      .populate("chats");
+    try {
+      const user = await User.findById(req.userInfo.id)
+        .select("chats")
+        .sort({ createdAt: "desc" })
+        .populate({
+          path: "chats",
+          populate: [
+            { path: "user1", select: USER_FIELDS },
+            { path: "user2", select: USER_FIELDS },
+          ],
+        });
 
-    return res.status(200).json({
-      status: "success",
-      buyerRequests,
-    });
+      const chats = await Promise.all(
+        user.chats.map(async (chat) => {
+          let item = {};
+
+          console.log(chat);
+
+          const messages = await Message.find({ chatId: chat._id })
+            .sort({ createdAt: "desc" })
+            .limit(1);
+
+          console.log("Chat User1", chat.user1.id);
+          console.log("Chat User2", chat.user2.id);
+          console.log("userid", user.id);
+
+          item = {
+            _id: chat._id,
+            lastMessage: messages[0],
+          };
+          if (chat.user1.id == user.id) {
+            // if logged in user is user1
+            item.to = chat.user2;
+          } else if (chat.user2.id == user.id) {
+            item.to = chat.user1;
+          }
+
+          console.log("Item", item);
+
+          return item;
+        })
+      );
+
+      console.log("Chats", chats);
+      return res.status(200).json({
+        status: "success",
+        user: {
+          ...user._doc,
+          chats,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(404).json({
+        status: "error",
+        message: err.message,
+      });
+    }
   }
 
   // Public routes
@@ -100,6 +153,24 @@ class UserController {
       return res.status(200).json({
         status: "success",
         user,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
+
+  async getPopularSellers(req, res) {
+    try {
+      const users = await User.find({ isSeller: true })
+        .sort({ orderCount: "desc" })
+        .limit(6);
+      return res.status(200).json({
+        status: "success",
+        sellers: users,
       });
     } catch (err) {
       console.log(err);

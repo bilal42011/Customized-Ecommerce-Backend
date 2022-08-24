@@ -99,6 +99,10 @@ class ProposalController {
       proposal.status = "ACCEPTED";
       buyerRequest.status = "ACTIVE_ORDER";
 
+      const seller = await User.findByIdAndUpdate(order.sellerId, {
+        $inc: { orderCount: 1 },
+      });
+
       await proposal.save();
       await buyerRequest.save();
 

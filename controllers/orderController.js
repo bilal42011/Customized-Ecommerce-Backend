@@ -2,6 +2,7 @@ const BuyerRequest = require("../models/BuyerRequest");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Proposal = require("../models/Proposal");
+const User = require("../models/User");
 
 const PUBLIC_USER_FIELDS = [
   "fullName",
@@ -60,6 +61,10 @@ class OrderController {
             shippingInfo,
             paymentInfo,
           };
+
+          const seller = await User.findByIdAndUpdate(product.ownerId, {
+            $inc: { orderCount: 1 },
+          });
 
           const newOrder = await Order.create(order);
           product.quantity -= item.quantity;

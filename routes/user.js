@@ -12,7 +12,8 @@ router
 router.post("/upgrade", authenticate, userController.upgradeAccount);
 router.get("/buyer-requests", authenticate, userController.getBuyerRequets);
 router.get("/chats", authenticate, userController.getChats);
+
 router.get("/public/:userId", userController.getUserInfo);
 router.get("/public/:userId/products", userController.getProducts);
-
+router.get("/sellers/popular", userController.getPopularSellers);
 module.exports = router;

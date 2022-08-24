@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     description: String,
+    orderCount: {
+      type: Number,
+      default: 0,
+    },
     city: {
       type: String,
       required: true,
