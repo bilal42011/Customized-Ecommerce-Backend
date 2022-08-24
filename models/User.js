@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
     },
+    authCode: Number,
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     avatar: String,
     isSeller: {
       type: Boolean,

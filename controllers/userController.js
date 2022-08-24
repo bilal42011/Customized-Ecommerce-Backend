@@ -16,10 +16,20 @@ class UserController {
   async patchUser(req, res) {
     const { firstName, lastName, description, city, address, email, phone } =
       req.body;
+    const avatar = req.file?.path;
     try {
       const user = await User.findByIdAndUpdate(
         req.userInfo.id,
-        { firstName, lastName, description, city, address, email, phone },
+        {
+          firstName,
+          lastName,
+          description,
+          city,
+          address,
+          email,
+          phone,
+          avatar,
+        },
         {
           new: true,
         }
