@@ -187,6 +187,9 @@ class OrderController {
         },
         { new: true }
       );
+      await BuyerRequest.findByIdAndUpdate(order.buyerRequestId, {
+        status: "CLOSED",
+      });
       await order.populate(ORDER_FIELDS_TO_POPULATE);
       return res.status(200).json({
         status: "success",
