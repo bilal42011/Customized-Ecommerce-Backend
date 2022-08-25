@@ -21,6 +21,7 @@ router.post(
 );
 
 router.patch("/:orderId/cancel", authenticate, orderController.cancelOrder);
+router.patch("/:orderId/undo-cancel", authenticate, orderController.undoCancel);
 
 router.patch(
   "/:orderId/cancel-confirm",

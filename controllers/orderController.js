@@ -256,7 +256,31 @@ class OrderController {
       });
     }
   }
-
+  async undoCancel(req, res) {
+    try {
+      const { orderId } = req.params;
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          message: "",
+          orderStatus: "IN_PROGRESS",
+          cancelInitiator: null,
+        },
+        { new: true }
+      );
+      await order.populate(ORDER_FIELDS_TO_POPULATE);
+      return res.status(200).json({
+        status: "success",
+        order,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  }
   async declineOrder(req, res) {
     try {
       const { orderId } = req.params;
