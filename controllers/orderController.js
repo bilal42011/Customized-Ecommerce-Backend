@@ -10,6 +10,7 @@ const PUBLIC_USER_FIELDS = [
   "_id",
   "city",
   "firstName",
+  "phone",
   "description",
   "lastName",
   "address",
