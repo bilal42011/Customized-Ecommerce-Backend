@@ -113,7 +113,7 @@ class UserController {
           ],
         });
 
-      const chats = await Promise.all(
+      let chats = await Promise.all(
         user.chats.map(async (chat) => {
           let item = {};
 
@@ -129,6 +129,7 @@ class UserController {
 
           item = {
             _id: chat._id,
+            updatedAt: chat.updatedAt,
             lastMessage: messages[0],
           };
           if (chat.user1.id == user.id) {
@@ -144,7 +145,9 @@ class UserController {
         })
       );
 
-      console.log("Chats", chats);
+      chats = chats.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
       return res.status(200).json({
         status: "success",
         user: {

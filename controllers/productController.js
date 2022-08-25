@@ -4,21 +4,43 @@ const User = require("../models/User");
 class ProductController {
   async getProducts(req, res) {
     try {
-      const { page, category } = req.query;
+      const { page, category, search } = req.query;
       const limit = 10;
-      const products = await Product.find({ category })
-        .skip((page - 1) * limit)
-        .limit(10)
-        .populate("ownerId");
-      const result = {
-        count: products.length,
-        products,
-        totalPages: Math.ceil(products.length / limit),
-      };
-      return res.status(200).json({
-        status: "success",
-        result,
-      });
+      if (!search) {
+        const products = await Product.find({ category })
+          .skip((page - 1) * limit)
+          .limit(10)
+          .populate("ownerId");
+        const result = {
+          count: products.length,
+          products,
+          totalPages: Math.ceil(products.length / limit),
+        };
+        return res.status(200).json({
+          status: "success",
+          result,
+        });
+      } else {
+        const products = await Product.find({
+          category,
+          $or: [
+            { title: new RegExp(search, "i") },
+            { description: new RegExp(search, "i") },
+          ],
+        })
+          .skip((page - 1) * limit)
+          .limit(10)
+          .populate("ownerId");
+        const result = {
+          count: products.length,
+          products,
+          totalPages: Math.ceil(products.length / limit),
+        };
+        return res.status(200).json({
+          status: "success",
+          result,
+        });
+      }
     } catch (err) {
       console.log(err);
       return res.status(401).json({
